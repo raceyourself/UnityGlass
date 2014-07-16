@@ -12,7 +12,6 @@ public class MinimalAndroidPlatform : Platform
 {
 
     // Native android class/object references
-    private AndroidJavaClass build_class;
     private AndroidJavaObject helper;
     private AndroidJavaClass helper_class;
     private AndroidJavaObject activity;
@@ -26,7 +25,6 @@ public class MinimalAndroidPlatform : Platform
             activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
             context = activity.Call<AndroidJavaObject>("getApplicationContext");
             helper_class = new AndroidJavaClass("com.glassfitgames.glassfitplatform.gpstracker.Helper");
-            build_class = new AndroidJavaClass("android.os.Build");
 
             // call the following on the UI thread
             activity.Call("runOnUiThread", new AndroidJavaRunnable(() => {
@@ -36,15 +34,20 @@ public class MinimalAndroidPlatform : Platform
                     helper = helper_class.CallStatic<AndroidJavaObject>("getInstance", context);
 
                     // Log screen dimensions - for debug only, can be commented out                    
-                } catch (Exception e) {                    
-                    Application.Quit();
+                } catch (Exception e) {
+                    Debug.LogError("Error getting helper instance");
+                    //Application.Quit(); // not allowed to call this on UI thread
+                    return;
                 }
                 initialised = true;                
             }));			
 
-        } catch (Exception e) {            
+        } catch (Exception e) {  
+            Debug.LogError("Error initialising java classes");
             Application.Quit();
-        }       
+            return;
+        }
+        Debug.Log("Java initialisation completed successfully");
     }
 
     /// <summary>
