@@ -23,8 +23,15 @@ public class PlatformPartner : MonoBehaviour
 
     public void OnApplicationFocus(bool paused)
     {
-        Debug.Log("Focus change order received with "+paused);
-        Platform.Instance.OnApplicationFocus(paused);
+       /* if (Platform.Instance.OnGlass())
+        {
+            Debug.Log("Focus change order received with " + paused);
+            Platform.Instance.OnApplicationFocus(paused);
+        }
+        else*/
+        {
+            Debug.Log("Focus change order received with " + paused + " but have not been forwarded");
+        }        
     }
 
     public void OnApplicationQuit()
