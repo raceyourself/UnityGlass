@@ -50,15 +50,21 @@ public class MinimalAndroidPlatform : Platform
     /// <summary>
     /// Called every frame by PlatformPartner to update internal state
     /// </summary>
-    public override void Update() {
+    public override void Update() 
+    {
         base.Update();
-        try {
-//            Debug.Log("Getting orientation over JNI");
+        
+        try
+        {
+            // Debug.Log("Getting orientation over JNI");
             AndroidJavaObject q = helper.Call<AndroidJavaObject>("getOrientation");
             playerOrientation.Update(new Quaternion(q.Call<float>("getX"), q.Call<float>("getY"), q.Call<float>("getZ"), q.Call<float>("getW")));
-        } catch (Exception e) {
-            Debug.LogError(e +  "JNI error getting orientation");
         }
+        catch (Exception e)
+        {
+            Debug.LogError(e + "JNI error getting orientation");
+        }
+        
     }
 	
 	public override bool OnGlass() 
