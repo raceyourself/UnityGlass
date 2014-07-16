@@ -8,16 +8,16 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 [System.Serializable]
 public class DataEntry
-{
+{        
     //warning some objects might not be serializable!
     //If you use this class for serialization process ensure it does check on stored value
-    public System.Object storedValue;
-    public bool persistent;
+    public System.Object   storedValue;    
+    public bool            persistent;
 
     public DataEntry(System.Object v, bool p)
     {
         storedValue = v;
-        persistent = p;
+        persistent  = p;
     }
 }
 
@@ -26,7 +26,7 @@ public class DataEntry
 /// Class used to centralize access for variables. Is working on top on DataStorage
 /// </summary>
 [ExecuteInEditMode]
-public class DataVault : MonoBehaviour
+public class DataVault : MonoBehaviour 
 {
     enum Types
     {
@@ -37,20 +37,20 @@ public class DataVault : MonoBehaviour
     }
 
     const string STARTING_BRACKET = "<db_";
-    const string ENDING_BRACKET = ">";
+    const string ENDING_BRACKET = ">";    
 
     static public Dictionary<string, DataEntry> data;
     static public Dictionary<string, List<UIComponentSettings>> registeredListeners;
     static public Dictionary<UIComponentSettings, List<string>> registrationRecord;
-
+    
 
     /// <summary>
     /// default unity initialziation function is preparing datavault and loads variables to useful easy to search dictionaries
     /// </summary>
     /// <returns></returns>
     void Start()
-    {
-        Initialize(true);
+    {        
+        Initialize();
     }
 
     /// <summary>
@@ -59,33 +59,45 @@ public class DataVault : MonoBehaviour
     /// <returns></returns>
     static public void SaveToBlob()
     {
-        Siaqodb db = SiaqodbUtils.DatabaseFactory.GetStreamingInstance();
+        Storage s = DataStore.GetStorage(DataStore.BlobNames.persistent);
+        if (s == null) return;
 
-        ISqoQuery<RaceYourself.Models.Blob.PersistentData> q = db.Query<RaceYourself.Models.Blob.PersistentData>();
+        //process all stored types and write them into 
+        StorageDictionaryBase<int> intStorage       = new StorageDictionaryBase<int>();
+        StorageDictionaryBase<bool> boolStorage     = new StorageDictionaryBase<bool>();
+        StorageDictionaryBase<double> doubleStorage = new StorageDictionaryBase<double>();        
+        StorageDictionaryBase<string> stringStorage = new StorageDictionaryBase<string>();
 
-        RaceYourself.Models.Blob.PersistentData vault = null;
-        if (q.Count() > 0)
+        foreach (var pair in data)
         {
-            vault = q.First();
-        }
-        else
-        {
-            vault = new RaceYourself.Models.Blob.PersistentData();
-        }
-
-        //load all stored data to local structure (later can be replaced by usage of remote type only
-        foreach (KeyValuePair<string, DataEntry> de in data)
-        {
-            DataEntry dEntry = de.Value;
-
-            if (dEntry.persistent == true)
+            DataEntry de = pair.Value;
+            if (de.persistent)
             {
-                vault.AddData(de.Key, dEntry.storedValue);
+                if (de.storedValue.GetType() == typeof(int))
+                {
+                    intStorage.Set(pair.Key, Convert.ToInt32(de.storedValue));
+                }
+                else if (de.storedValue.GetType() == typeof(bool))
+                {
+                    boolStorage.Set(pair.Key, Convert.ToBoolean(de.storedValue));
+                }
+                else if (de.storedValue.GetType() == typeof(double) || de.storedValue.GetType() == typeof(float))
+                {
+                    doubleStorage.Set(pair.Key, Convert.ToDouble(de.storedValue));
+                }
+                else if (de.storedValue.GetType() == typeof(string))
+                {
+                    stringStorage.Set(pair.Key, Convert.ToString(de.storedValue));
+                }
             }
         }
 
-        db.StoreObject(vault);
-        return;        
+        s.dictionary.Set(Types.Integer.ToString(), intStorage    );
+        s.dictionary.Set(Types.Double .ToString(), doubleStorage );
+        s.dictionary.Set(Types.Boolean.ToString(), boolStorage   );
+        s.dictionary.Set(Types.String .ToString(), stringStorage );
+
+        DataStore.SaveStorage(DataStore.BlobNames.persistent);
     }
 
     /// <summary>
@@ -94,55 +106,75 @@ public class DataVault : MonoBehaviour
     /// <returns></returns>
     static public void Initialize()
     {
-        Initialize(false);
-    }
+        if (data != null) return;
 
-    /// <summary>
-    /// loads data form current datastore and prepares easy to search dictionaries
-    /// </summary>
-    /// <param name="forced"></param>
-    /// <returns></returns>
-    static public void Initialize(bool forced)
-    {
-
-        if (data != null && !forced) return;
-
+        data = new Dictionary<string, DataEntry>();
         registeredListeners = new Dictionary<string, List<UIComponentSettings>>();
         registrationRecord = new Dictionary<UIComponentSettings, List<string>>();
 
-        data = new Dictionary<string, DataEntry>();
+        Storage s = DataStore.GetStorage(DataStore.BlobNames.persistent);
+        if (s == null) return;
 
-        Siaqodb db = SiaqodbUtils.DatabaseFactory.GetStreamingInstance();
-        ISqoQuery<RaceYourself.Models.Blob.PersistentData> q = db.Query<RaceYourself.Models.Blob.PersistentData>();
-
-        RaceYourself.Models.Blob.PersistentData vault = q.FirstOrDefault();
-
-        //load all stored data to local structure (later can be replaced by usage of remote type only
-        if (vault != null)
+        //process all stored types and write them into 
+        StorageDictionaryBase<int> intStorage = s.dictionary.Get(Types.Integer.ToString()) as StorageDictionaryBase<int>;
+        if (intStorage != null)
         {
-            foreach (RaceYourself.Models.Blob.DictionaryEntry<int> val in vault.listInt)
+            for (int i = 0; i < intStorage.Length(); i++)
             {
-                data[val.name] = new DataEntry(val.data, true);
+                string name;
+                int value;
+                intStorage.Get(i, out name, out value);
+                if (name.Length > 0)
+                {
+                    data[name] = new DataEntry(value, true);
+                }
             }
-
-            foreach (RaceYourself.Models.Blob.DictionaryEntry<bool> val in vault.listBool)
-            {
-                data[val.name] = new DataEntry(val.data, true);
-            }
-
-            foreach (RaceYourself.Models.Blob.DictionaryEntry<double> val in vault.listDouble)
-            {
-                data[val.name] = new DataEntry(val.data, true);
-            }
-
-            foreach (RaceYourself.Models.Blob.DictionaryEntry<string> val in vault.listStr)
-            {
-                data[val.name] = new DataEntry(val.data, true);
-            }
-
-
-            return;
         }
+
+        StorageDictionaryBase<bool> boolStorage = s.dictionary.Get(Types.Boolean.ToString()) as StorageDictionaryBase<bool>;
+        if (intStorage != null)
+        {
+            for (int i = 0; i < boolStorage.Length(); i++)
+            {
+                string name;
+                bool value;
+                boolStorage.Get(i, out name, out value);
+                if (name.Length > 0)
+                {
+                    data[name] = new DataEntry(value, true);
+                }
+            }
+        }
+
+        StorageDictionaryBase<double> doubleStorage = s.dictionary.Get(Types.Double.ToString()) as StorageDictionaryBase<double>;
+        if (doubleStorage != null)
+        {
+            for (int i = 0; i < doubleStorage.Length(); i++)
+            {
+                string name;
+                double value;
+                doubleStorage.Get(i, out name, out value);
+                if (name.Length > 0)
+                {
+                    data[name] = new DataEntry(value, true);
+                }
+            }
+        }
+
+        StorageDictionaryBase<string> stringStorage = s.dictionary.Get(Types.String.ToString()) as StorageDictionaryBase<string>;
+        if (stringStorage != null)
+        {
+            for (int i = 0; i < stringStorage.Length(); i++)
+            {
+                string name;
+                string value;
+                stringStorage.Get(i, out name, out value);
+                if (name.Length > 0)
+                {
+                    data[name] = new DataEntry(value, true);
+                }
+            }
+        }                
     }
 
     /// <summary>
@@ -153,7 +185,7 @@ public class DataVault : MonoBehaviour
     /// <returns></returns>
     static public void Set(string name, System.Object value)
     {
-        if (data == null)
+        if (data == null) 
         {
             Initialize();
         }
@@ -184,7 +216,7 @@ public class DataVault : MonoBehaviour
             data[name] = new DataEntry(value, false);
         }
 
-        if (Application.isPlaying && registeredListeners.ContainsKey(name))
+        if (registeredListeners.ContainsKey(name))
         {
             List<UIComponentSettings> list = registeredListeners[name];
             if (list != null)
@@ -194,7 +226,7 @@ public class DataVault : MonoBehaviour
                     listener.Apply();// .SetTranslatedText(false);
                 }
             }
-        }
+        }                
     }
 
     /// <summary>
@@ -255,12 +287,7 @@ public class DataVault : MonoBehaviour
         return data[name].storedValue;
     }
 
-    /// <summary>
-    /// removes record of the variable
-    /// </summary>
-    /// <param name="name">name identifier</param>
-    /// <returns></returns>
-    static public void Remove(string name)
+    static public string GetString(string name)
     {
         if (data == null)
         {
@@ -269,6 +296,28 @@ public class DataVault : MonoBehaviour
 
         if (!data.ContainsKey(name))
         {
+            return string.Empty;
+        }
+
+        object o = data[name].storedValue;
+
+        return o == null ? string.Empty : o.ToString();
+    }
+
+    /// <summary>
+    /// removes record of the variable
+    /// </summary>
+    /// <param name="name">name identifier</param>
+    /// <returns></returns>
+    static public void Remove(string name)
+    {
+        if (data == null )
+        {
+            Initialize();
+        }
+        
+        if ( !data.ContainsKey(name))
+        {            
             return;
         }
 
@@ -295,14 +344,14 @@ public class DataVault : MonoBehaviour
     /// <returns>translated values</returns>    
     static public string Translate(string source, int startingPoint, UIComponentSettings registerForUpdates)
     {
-        if (!Application.isPlaying || startingPoint >= source.Length) return source;
+        if (startingPoint >= source.Length) return source;
 
         int start = source.IndexOf(STARTING_BRACKET, startingPoint);
-        int end;
-
+        int end;        
+         
         if (start > -1)
         {
-            end = source.IndexOf(ENDING_BRACKET, start);
+            end = source.IndexOf(ENDING_BRACKET, start);            
             if (end > -1)
             {
                 source = Translate(source, end, registerForUpdates);
@@ -316,8 +365,8 @@ public class DataVault : MonoBehaviour
 
                     //find translated word
                     System.Object obj = Get(dataName);
-
-                    if (obj == null)
+                    
+                    if (obj == null)                    
                     {
                         //we did not found word, we will return unchanged
                         return source;
@@ -327,10 +376,10 @@ public class DataVault : MonoBehaviour
                         //we have found word
                         newSection = obj.ToString();
                     }
-
+                    
                 }
-                string startSection = start > 0 ? source.Substring(0, start) : "";
-                string endSection = end < source.Length - 1 ? source.Substring(end + 1, source.Length - end - 1) : "";
+                string startSection = start > 0 ? source.Substring(0,start) : "";
+                string endSection = end < source.Length-1 ? source.Substring(end+1,source.Length-end-1) : "";
                 return startSection + newSection + endSection;
             }
         }
@@ -346,8 +395,7 @@ public class DataVault : MonoBehaviour
     /// <returns></returns>
     static public void RegisterListner(UIComponentSettings listner, string identifier)
     {
-        if (Application.isPlaying &&
-            registeredListeners != null && registrationRecord != null &&
+        if (registeredListeners != null && registrationRecord != null &&
             listner != null && identifier != null && identifier.Length > 0)
         {
             if (!registeredListeners.ContainsKey(identifier))

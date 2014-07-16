@@ -169,7 +169,6 @@ public class PlayerOrientation
 				autoResetLerpTime = 0;
 				autoResetYaw = null;
 				// notify platform
-				Platform.Instance.LocalPlayerPosition.NotifyAutoBearing();
 			}
 		}
 		else if (Mathf.Abs(AsYaw()) > AUTO_RESET_THRESHOLD  // facing more than AUTO_RESET_THRESHOLD away from current forward reference
@@ -180,7 +179,7 @@ public class PlayerOrientation
 			autoResetTimer += Time.deltaTime;
 			autoResetYaw = autoResetYaw.HasValue ? 0.7f*autoResetYaw.Value + 0.3f*AsYawFromNorth() : AsYawFromNorth();
 
-			if (autoResetTimer > AUTO_RESET_TIME_DELAY
+		/*	if (autoResetTimer > AUTO_RESET_TIME_DELAY
 				&& (!Platform.Instance.LocalPlayerPosition.IsTracking // not tracking, i.e. paused or on a menu screen
 			     || Platform.Instance.LocalPlayerPosition.Pace < 1.0f  // going slowly/stopped
 			     || bearingDiffDegrees(Platform.Instance.LocalPlayerPosition.Bearing, Platform.Instance.Yaw()) < CORNERING_TOLERANCE))  // facing with 20 degrees of GPS-based forward movement, i.e. looking where they are going. Note GpsBearing is not valid (-999.0) if the user is stationary
@@ -191,7 +190,7 @@ public class PlayerOrientation
 
 				// clean up
 				autoResetTimer = 0;
-			}
+			}*/
 
 		}
 		else

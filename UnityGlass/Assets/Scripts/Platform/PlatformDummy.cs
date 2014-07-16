@@ -3,12 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System;
-using System.Diagnostics;
 using System.IO;
-using Newtonsoft.Json;
 
 #if (UNITY_EDITOR || RACEYOURSELF_MOBILE)
-#if UNITY_EDITOR
 using UnityEditor;
 #endif
 
@@ -20,12 +17,6 @@ public class PlatformDummy : Platform
 	const string STARTHEX_SCENE_NAME = "Assets/Scenes/Start Hex.unity";
 	const string SNACKRUN_SCENE_NAME = "Assets/Scenes/SnackRun.unity";
 	const string UITEST_SCENE_NAME = "Assets/Scenes/UITestScene.unity";
-
-	// Helper class for accessing the player's current position, speed and direction of movement
-	private PlayerPosition _localPlayerPosition;
-    public override PlayerPosition LocalPlayerPosition {
-        get { return _localPlayerPosition; }
-    }
 
 	private string blobstore = "game-blob";
 	private string blobassets = "blob";
@@ -56,9 +47,7 @@ public class PlatformDummy : Platform
 	public override bool IsDisplayRemote() {
 		return false;
 	}	
-	public override bool HasGpsProvider() {
-		return false;
-	}	
+
     public override bool IsBluetoothBonded()
     {
         return false;
@@ -121,21 +110,6 @@ public class PlatformDummy : Platform
 		}
 		//play
 		EditorApplication.isPlaying = true;
-
-		//initialise objects for flow, datastorage, UIScene etc, if this isn't startHex
-		if(scene != STARTHEX_SCENE_NAME)
-		{
-			InitForPreview playModePreparer = (InitForPreview)GameObject.FindObjectOfType(typeof(InitForPreview));
-			if(playModePreparer != null)
-			{
-				playModePreparer.PrepareForPlayMode();
-			}
-			else
-			{
-				UnityEngine.Debug.LogError("PlatformDummy: Unable to initialise correctly for Play mode in editor. Ensure that a correctly configured InitForPreview component is present in the scene");
-			}
-		}
-
 	}
 #endif
 
@@ -253,10 +227,9 @@ public class PlatformDummy : Platform
 	public override void BluetoothBroadcast (string json)
 	{
 		try {
-			SimpleJSON.JSON.Parse(json);
-			log.info("BluetoothBroadcast: " + json);		
+			SimpleJSON.JSON.Parse(json);	
 		} catch (Exception e) {
-			log.error(e, "BluetoothBroadcast: could not parse json!");
+			Debug.LogError(e+ "BluetoothBroadcast: could not parse json!");
 		}
 		return;
 	}

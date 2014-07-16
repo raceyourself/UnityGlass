@@ -1,12 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Diagnostics;
 using System.Threading;
 using System;
 using System.Runtime.CompilerServices;
-using SimpleJSON;
-using Newtonsoft.Json;
 using System.Collections;
 using System.IO;
 
@@ -28,7 +25,6 @@ public abstract class Platform : SingletonBase
     
     // internal platform tools
     public PlatformPartner partner;  // MonoBehavior that passes unity calls through to platform
-    protected static Log log = new Log("Platform");  // for use by subclasses
     
     // internal platform state
     protected static bool applicationIsQuitting = false;
@@ -63,7 +59,6 @@ public abstract class Platform : SingletonBase
     }
    
 	public virtual void OnDestroy() {
-		log.info("OnDestroy");
 		applicationIsQuitting = true;
 	}
 
@@ -75,8 +70,6 @@ public abstract class Platform : SingletonBase
         {
             Initialize();
         }
-
-        log.info("awake, ensuring attachment to Platform game object for MonoBehaviours support");        
     }
 
 	protected virtual void Initialize()
@@ -90,13 +83,10 @@ public abstract class Platform : SingletonBase
 
 	protected virtual void PostInit()
     {
-        log.info("Starting PostInit");
-        
-    	log.info("Initializing bluetooth");
 		BluetoothServer();
 
 		// start listening for 2-tap gestures to reset gyros
-		GestureHelper.onTwoTap += new GestureHelper.TwoFingerTap(() => {
+	/*	GestureHelper.onTwoTap += new GestureHelper.TwoFingerTap(() => {
             if (IsRemoteDisplay())
             {
                 Platform.Instance.GetPlayerOrientation().Reset();
@@ -110,7 +100,7 @@ public abstract class Platform : SingletonBase
                 }
 
             }
-		});
+		});*/
 	}
 
 
@@ -151,7 +141,7 @@ public abstract class Platform : SingletonBase
     {
         if (partner == null)
         {
-            log.warning("Partner is not set yet. scene not constructed, you cant refer scene objects. Do you try to do so from another thread?");
+            Debug.Log("Partner is not set yet. scene not constructed, you cant refer scene objects. Do you try to do so from another thread?");
         }
 
         return partner;

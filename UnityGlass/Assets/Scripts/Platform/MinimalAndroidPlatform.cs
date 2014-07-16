@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
-using Sqo;
 
 #if UNITY_ANDROID
 /// <summary>
@@ -20,8 +19,7 @@ public class MinimalAndroidPlatform : Platform
     private AndroidJavaObject context;
 
 
-    protected override void Initialize() {
-        log.info("Initialising MinimalAndroidPlatform");
+    protected override void Initialize() {        
         base.Initialize();
         try {
             AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
@@ -37,20 +35,14 @@ public class MinimalAndroidPlatform : Platform
                     // Get the singleton helper objects
                     helper = helper_class.CallStatic<AndroidJavaObject>("getInstance", context);
 
-                    // Log screen dimensions - for debug only, can be commented out
-                    log.info("Screen dimensions are " + GetScreenDimensions().x.ToString() + "x" + GetScreenDimensions().y.ToString());
-                } catch (Exception e) {
-                    log.error(e, "JNI error in android initialisation UI thread");
+                    // Log screen dimensions - for debug only, can be commented out                    
+                } catch (Exception e) {                    
                     Application.Quit();
                 }
-                initialised = true;
-                log.info("Initialise complete");
-            }));
-			
-            log.info("Native android classes created OK");
+                initialised = true;                
+            }));			
 
-        } catch (Exception e) {
-            log.error(e, "JNI error in android initialisation main thread");
+        } catch (Exception e) {            
             Application.Quit();
         }       
     }
@@ -61,21 +53,21 @@ public class MinimalAndroidPlatform : Platform
     public override void Update() {
         base.Update();
         try {
-//            log.info("Getting orientation over JNI");
+//            Debug.Log("Getting orientation over JNI");
             AndroidJavaObject q = helper.Call<AndroidJavaObject>("getOrientation");
             playerOrientation.Update(new Quaternion(q.Call<float>("getX"), q.Call<float>("getY"), q.Call<float>("getZ"), q.Call<float>("getW")));
         } catch (Exception e) {
-            log.error(e, "JNI error getting orientation");
+            Debug.LogError(e +  "JNI error getting orientation");
         }
     }
 	
 	public override bool OnGlass() 
     {
         try {
-            //log.info("seeing if glass");
+            //Debug.Log("seeing if glass");
             return helper_class.CallStatic<bool>("onGlass");
         } catch (Exception e) {
-            log.error(e, "JNI onGlass() failed");
+            Debug.LogError(e + "JNI onGlass() failed");
             return false;
         }
     }
@@ -83,10 +75,10 @@ public class MinimalAndroidPlatform : Platform
 	public override bool IsRemoteDisplay() 
     {
         try {
-            //log.info("seeing if glass");
+            //Debug.Log("seeing if glass");
             return helper_class.CallStatic<bool>("isRemoteDisplay");
         } catch (Exception e) {
-            log.error(e, "JNI IsRemoteDisplay() failed");
+            Debug.LogError(e + "JNI IsRemoteDisplay() failed");
             return false;
         }
     }
@@ -94,10 +86,10 @@ public class MinimalAndroidPlatform : Platform
     public override bool IsPluggedIn()
     {
         try {
-            log.info("Calling IsPluggedIn");
+            Debug.Log("Calling IsPluggedIn");
             return helper.Call<bool>("isPluggedIn");
         } catch (Exception e) {
-            log.error(e, "JNI IsPluggedIn() failed");
+            Debug.LogError(e + "JNI IsPluggedIn() failed");
             return false;
         }
     }
@@ -106,7 +98,7 @@ public class MinimalAndroidPlatform : Platform
         try {
             return helper.Call<bool>("hasInternet");
         } catch (Exception e) {
-            log.error(e, "JNI HasInternet() failed");
+            Debug.LogError(e + "JNI HasInternet() failed");
             return false;
         }
     }
@@ -115,14 +107,14 @@ public class MinimalAndroidPlatform : Platform
         try {
             return helper.Call<bool>("hasWifi");
         } catch (Exception e) {
-            log.error(e, "JNI HasWifi() failed");
+            Debug.LogError(e + "JNI HasWifi() failed");
             return false;
         }
     }
 
     public override bool IsDisplayRemote() {
         foreach(string peer in BluetoothPeers()) {
-            log.info("BT peer: " + peer);
+            Debug.Log("BT peer: " + peer);
             if (peer.Contains("Glass") || peer.Contains("Display")) return true;
         }
         return false;
@@ -133,7 +125,7 @@ public class MinimalAndroidPlatform : Platform
         try {
             return helper.Call<bool>("isBluetoothBonded");
         } catch (Exception e) {
-            log.error(e, "JNI IsBluetoothBonded() failed");
+            Debug.LogError(e + "JNI IsBluetoothBonded() failed");
             return false;
         }
     }
@@ -149,7 +141,7 @@ public class MinimalAndroidPlatform : Platform
         }
         catch (Exception e)
         {
-            log.error(e, "JNI GetScreenDimensions() failed");
+            Debug.LogError(e + "JNI GetScreenDimensions() failed");
             return new Vector2i(0,0);
         }
     } 
@@ -162,10 +154,10 @@ public class MinimalAndroidPlatform : Platform
     public override byte[] LoadBlob(string id) {
         try {
             byte[] blob = helper_class.CallStatic<byte[]>("loadBlob", id);
-            log.info("Game blob " + id + " of size: " + blob.Length + " loaded");
+            Debug.Log("Game blob " + id + " of size: " + blob.Length + " loaded");
             return blob;
         } catch (Exception e) {
-            log.error(e, "JNI LoadBlob() failed");          
+            Debug.LogError(e + "JNI LoadBlob() failed");          
         }
         return null;
     }
@@ -173,11 +165,11 @@ public class MinimalAndroidPlatform : Platform
     // Store the blob
     public override void StoreBlob(string id, byte[] blob) {
         try {
-            log.info("storing blob");
+            Debug.Log("storing blob");
             helper_class.CallStatic("storeBlob", id, blob);
-            log.info("Game blob " + id + " of size: " + blob.Length + " stored");
+            Debug.Log("Game blob " + id + " of size: " + blob.Length + " stored");
         } catch (Exception e) {
-            log.error(e, "JNI StoreBlob() failed");
+            Debug.LogError(e + "JNI StoreBlob() failed");
         }
     }
 
@@ -185,18 +177,18 @@ public class MinimalAndroidPlatform : Platform
     public override void EraseBlob(string id) {
         try {
             helper_class.CallStatic("eraseBlob", id);
-            log.info("Game blob " + id + " erased");
+            Debug.Log("Game blob " + id + " erased");
         } catch (Exception e) {
-            log.error(e, "JNI EraseBlob() failed");          
+            Debug.LogError(e + "JNI EraseBlob() failed");          
         }
     }
 
     public override void ResetBlobs() {
         try {
             helper_class.CallStatic("resetBlobs");
-            log.info("Game blobs reset");
+            Debug.Log("Game blobs reset");
         } catch (Exception e) {
-            log.error(e, "JNI ResetBlobs() failed");          
+            Debug.LogError(e + "JNI ResetBlobs() failed");          
         }
     }
 
@@ -211,7 +203,7 @@ public class MinimalAndroidPlatform : Platform
             }
             catch(Exception e)
             {
-                log.error(e, "JNI GetTouchCount() failed");
+                Debug.LogError(e + "JNI GetTouchCount() failed");
                 return 0;
             }
         } else {
@@ -227,7 +219,7 @@ public class MinimalAndroidPlatform : Platform
         if (OnGlass ()) {
             try
             {
-                //log.info("Checking touch input..");
+                //Debug.Log("Checking touch input..");
                 int touchCount = activity.Call<int> ("getTouchCount");
                 if (touchCount > 0)
                 {
@@ -240,7 +232,7 @@ public class MinimalAndroidPlatform : Platform
             }
             catch(Exception e)
             {
-                log.error(e, "JNI GetTouchInput() failed");
+                Debug.LogError(e + "JNI GetTouchInput() failed");
                 return null;
             }
         } else {
@@ -267,11 +259,11 @@ public class MinimalAndroidPlatform : Platform
         try
         {
             activity.Call("startBluetoothServer");
-            log.info("Starting Bluetooth server");
+            Debug.Log("Starting Bluetooth server");
         }
         catch (Exception e)
         {
-            log.error(e, "JNI BluetoothServer() failed");
+            Debug.LogError(e + "JNI BluetoothServer() failed");
         }
     }
 
@@ -280,11 +272,11 @@ public class MinimalAndroidPlatform : Platform
         try
         {
             activity.Call("startBluetoothClient");
-            log.info("Starting Bluetooth client");
+            Debug.Log("Starting Bluetooth client");
         }
         catch (Exception e)
         {
-            log.error(e, "JNI BluetoothClient() failed");
+            Debug.LogError(e + "JNI BluetoothClient() failed");
         }
     }
 
@@ -292,11 +284,11 @@ public class MinimalAndroidPlatform : Platform
         try
         {
             activity.Call("broadcast", json);
-            log.info("Broadcasted Bluetooth message: " + json.ToString());
+            Debug.Log("Broadcasted Bluetooth message: " + json.ToString());
         }
         catch (Exception e)
         {
-            log.error(e, "JNI BluetoothBroadcast() failed");
+            Debug.LogError(e + "JNI BluetoothBroadcast() failed");
         }
     }
 
@@ -307,7 +299,7 @@ public class MinimalAndroidPlatform : Platform
         }
         catch (Exception e)
         {
-            log.error(e, "JNI BluetoothPeers() failed");
+            Debug.LogError(e + "JNI BluetoothPeers() failed");
             return new string[0];
         }
     }

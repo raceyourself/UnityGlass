@@ -6,8 +6,7 @@ using System.Collections.Generic;
 public class GraphComponent : MonoBehaviour
 {
     [System.NonSerialized]
-	public GraphData m_graph;
-    public UIAtlas m_defaultHexagonalAtlas;
+	public GraphData m_graph;    
     private int selectedFlow = 0;
     private bool initialize = false;
 
@@ -42,10 +41,12 @@ public class GraphComponent : MonoBehaviour
         if (!initialize)
         {
             initialize = true;
-            DataStore.LoadStorage(DataStore.BlobNames.flow);            
-            
+            DataStore.LoadStorage(DataStore.BlobNames.flow);
+
+            SetSelectedFlowByName("GlassFlow");
+/*
             //test area. Need to be removed after tests are done
-#if !UNITY_EDITOR
+#if UNITY_EDITOR
             //below is the example how to initialize game with specific flow
             if (!Platform.Instance.OnGlass() )
             {
@@ -87,6 +88,8 @@ public class GraphComponent : MonoBehaviour
 			}
             SetSelectedFlowByName(flowName);
 #endif
+            */
+
             instance = this;
         }
     }	

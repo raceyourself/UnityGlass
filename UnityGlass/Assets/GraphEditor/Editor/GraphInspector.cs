@@ -32,12 +32,16 @@ public class GraphInspector : Editor
         EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Available Flows");            
             int oldIndex = componentSource.GetSelectedFlowIndex();
-            int flowIndex = EditorGUILayout.Popup(oldIndex, GetFlowList());
-
-            if (oldIndex != flowIndex)
+            int flowIndex = -1;
+            if (GetFlowList() != null && GetFlowList().Length > 0)
             {
-                componentSource.SetSelectedFlowIndex(flowIndex);
-                GraphWindow.Init();
+                flowIndex = EditorGUILayout.Popup(oldIndex, GetFlowList());
+
+                if (oldIndex != flowIndex)
+                {
+                    componentSource.SetSelectedFlowIndex(flowIndex);
+                    GraphWindow.Init();
+                }
             }
         EditorGUILayout.EndHorizontal();
 
@@ -63,7 +67,7 @@ public class GraphInspector : Editor
 
                 DataStore.SaveStorage(DataStore.BlobNames.flow, true);
             }
-            if (GUILayout.Button(new GUIContent("Remove current flow", "You should never remove last flow. If you do it will create noname emply flow for you")))
+            if (flowIndex >= 0 && GUILayout.Button(new GUIContent("Remove current flow", "You should never remove last flow. If you do it will create noname emply flow for you")))
             {
                 flowDictionary.RemoveAt(flowIndex);
                 DataStore.SaveStorage(DataStore.BlobNames.flow, true);
