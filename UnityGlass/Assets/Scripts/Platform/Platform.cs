@@ -29,7 +29,6 @@ public abstract class Platform : SingletonBase
     // internal platform state
     protected static bool applicationIsQuitting = false;
     protected bool initialised = false;
-    private int sessionId = 0;
     public bool connected { get; protected set; }
     public float syncInterval = 60f;  // Other components may change this to disable sync temporarily?
 
@@ -83,7 +82,9 @@ public abstract class Platform : SingletonBase
 
 	protected virtual void PostInit()
     {
-		BluetoothServer();
+		
+            Debug.Log ("Starting post-init");
+            BluetoothServer();
 
 		// start listening for 2-tap gestures to reset gyros
 	/*	GestureHelper.onTwoTap += new GestureHelper.TwoFingerTap(() => {
