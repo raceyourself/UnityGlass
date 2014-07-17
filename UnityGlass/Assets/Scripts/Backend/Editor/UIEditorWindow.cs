@@ -339,7 +339,8 @@ public class UIEditorWindow : EditorWindow
     {
         foreach (Transform t in root)
         {
-            //if this child is serializable clean it up
+            GameObject.DestroyImmediate(t.gameObject);
+            /*//if this child is serializable clean it up
             if (t.gameObject.GetComponent<UISerializable>() != null)
             {
                 GameObject.DestroyImmediate(t.gameObject);
@@ -348,7 +349,7 @@ public class UIEditorWindow : EditorWindow
             else if (t.gameObject.GetComponentInChildren<UISerializable>() != null)
             {
                 ClearCurrentStage(t);
-            }
+            }*/
         }
     }
 

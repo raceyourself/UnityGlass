@@ -129,7 +129,22 @@ public class UIManager : MonoBehaviour
                 //this method allows us to keep prefab reference for saving purposes. During runtime it 
                 //doesn't matter if we use prefabs or clan gameobjects but if while in editor we will try 
                 //to save without this reference we will loose connection with source                
-                GameObject instanceRoot = root;
+                GameObject instanceRoot;
+                Vector3 scale;
+
+                if (Application.isPlaying)
+                {
+                    instanceRoot = (GameObject)GameObject.Instantiate(root);
+
+                    scale = instanceRoot.transform.localScale;
+                    instanceRoot.transform.parent = root.transform.parent;
+                    instanceRoot.transform.localScale = scale;
+                }
+                else
+                {
+                    instanceRoot = root;
+                }
+
                 //instanceRoot.transform.parent = root.transform.parent;  //this line do nothing in editor version
 
                 string path = panelData[panelID];
@@ -137,21 +152,25 @@ public class UIManager : MonoBehaviour
                 GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
 
                 //attach to parent but do not rescale it
-                Vector3 scale = instance.transform.localScale;
+                scale = instance.transform.localScale;
                 instance.transform.parent = instanceRoot.transform;
                 instance.transform.localScale = scale;
 
 #else
 
                 GameObject instanceRoot = (GameObject)GameObject.Instantiate(root);
+
+                //attach next to the original but ensure copy do not get rescaled
+                Vector3 scale = instanceRoot.transform.localScale;
                 instanceRoot.transform.parent = root.transform.parent;
+                instanceRoot.transform.localScale = scale;
 
                 string path = panelData[panelID];
                 GameObject prefab = Resources.Load(path) as GameObject;
                 GameObject instance = (GameObject)GameObject.Instantiate(prefab);
                 
                 //attach to parent but do not rescale it
-                Vector3 scale = instance.transform.localScale;
+                scale = instance.transform.localScale;
                 instance.transform.parent = instanceRoot.transform;
                 instance.transform.localScale = scale;
             

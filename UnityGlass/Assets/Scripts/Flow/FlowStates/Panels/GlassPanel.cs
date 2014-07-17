@@ -55,7 +55,7 @@ public class GlassPanel : Panel
     public override void StateUpdate()
     {
         base.StateUpdate();
-
+        return;
         if (Platform.Instance.OnGlass())
         {
             PlayerOrientation p = Platform.Instance.GetPlayerOrientation();

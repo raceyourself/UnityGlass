@@ -64,7 +64,7 @@ public class Exit : FlowState
     public override void EnterStart()
     {
         base.EnterStart();
-
+        Debug.Log("Exit by state");
         Application.Quit();
     }
 }

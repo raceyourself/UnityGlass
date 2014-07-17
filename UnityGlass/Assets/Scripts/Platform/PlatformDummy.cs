@@ -27,7 +27,7 @@ public class PlatformDummy : Platform
 
     public override bool OnGlass()
     {
-        return true;
+        return false;
     }
 	public override bool IsRemoteDisplay()
 	{
@@ -52,66 +52,6 @@ public class PlatformDummy : Platform
     {
         return false;
     }
-
-#if UNITY_EDITOR
-	[MenuItem("Race Yourself/Play from StartHex Scene, with flow at Start %0")]
-	public static void PlayFromStartHex()
-    {
-
-		PlayWithScene(STARTHEX_SCENE_NAME, false, false);
-	}
-
-	[MenuItem("Race Yourself/Play from current Scene, with flow at Game Intro %[")]
-	public static void PlayFromCurrentGameScene()
-	{
-		PlayWithScene(null, true, false);
-	}
-
-	[MenuItem("Race Yourself/Play from SnackRun Scene, with flow at Game Intro %]")]
-	public static void PlayFromSnackRunscene()
-	{
-		PlayWithScene(SNACKRUN_SCENE_NAME, true, false);
-	}
-
-	[MenuItem("Race Yourself/Play with Mobile UX %.")]
-	public static void PlayWithMobileUX()
-	{
-		PlayWithScene(STARTHEX_SCENE_NAME, false, true);
-	}
-	
-	[MenuItem("Race Yourself/Load UITestScene %u")]
-	public static void LoadUITestScene()
-	{
-		EditorApplication.SaveCurrentSceneIfUserWantsTo();
-		EditorApplication.OpenScene(UITEST_SCENE_NAME);
-	}
-	
-	protected static void PlayWithScene(string scene, bool toGame, bool toMobile)
-	{
-		//encode the 'intent' in this integer
-		if(toGame)
-		{
-			PlayerPrefs.SetInt("toGame", 1);
-		}
-		else if(toMobile)
-		{
-			PlayerPrefs.SetInt("toGame", 2);
-		}
-		else
-		{
-			PlayerPrefs.SetInt("toGame", 0);
-		}
-
-		//load scene, then play
-		if(scene != null)
-		{
-			EditorApplication.SaveCurrentSceneIfUserWantsTo();
-			EditorApplication.OpenScene(scene);
-		}
-		//play
-		EditorApplication.isPlaying = true;
-	}
-#endif
 
 	protected override void Initialize()
 	{
@@ -143,12 +83,34 @@ public class PlatformDummy : Platform
 	}
 
 	public override byte[] LoadBlob(string id) {
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+        try
+        {
+            string filePath = @"jar:file://" + Application.dataPath + "!/assets/" + blobassets +"/"+id;
+            var www = new WWW(filePath);
+            while (!www.isDone) { }; // block until finished
+
+            /*if (string.IsNullOrEmpty(www.error))
+            {
+                Debug.LogError("Can't read");
+            }*/
+
+            return www.bytes;
+        }
+        catch (FileNotFoundException e)
+        {
+            return LoadDefaultBlob(id);
+        }
+
+#else
 		try {
 			UnityEngine.Debug.Log("PlatformDummy: Loading blob id: " + id);			
 			return File.ReadAllBytes(Path.Combine(getBlobStorePath(), id));			
 		} catch (FileNotFoundException e) {
 			return LoadDefaultBlob(id);
 		}
+#endif
 	}
 
 	public byte[] LoadDefaultBlob(string id) {
@@ -167,7 +129,7 @@ public class PlatformDummy : Platform
 	}
 
 	protected string getBlobStorePath()
-	{
+	{       
         // TODO - this ought to be done just once in initialize, but seems to get called before initialize completes
         blobstore = Path.Combine(Application.persistentDataPath, blobstore);
         blobassets = Path.Combine(Application.streamingAssetsPath, blobassets);

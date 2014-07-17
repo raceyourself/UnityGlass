@@ -23,7 +23,7 @@ public class ButtonFunctionCollection
 		return true;
 	}
 
-    static public bool IsTutorialRequired(FlowButton button, Panel panel)
+    static public bool IsTutorialRequired(FlowButton button, FlowState panel)
     {
         object o = DataVault.Get("tutorial_done");
         if (o != null)
@@ -38,7 +38,7 @@ public class ButtonFunctionCollection
         return true;
     }
 
-    static public bool SetTutorialDone(FlowButton button, Panel panel)
+    static public bool SetTutorialDone(FlowButton button, FlowState panel)
     {
         DataVault.Set("tutorial_done", true);
         DataVault.SetPersistency("tutorial_done", true);

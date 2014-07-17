@@ -157,5 +157,12 @@ public class TapSwipePanel : Panel
             DataVault.Set(LOCK_NAME, string.Empty);
         }
 
+#if UNITY_EDITOR
+        if (Input.GetMouseButtonUp(0))
+        {
+            tapHandler();
+        }
+#endif
+
     }
 }

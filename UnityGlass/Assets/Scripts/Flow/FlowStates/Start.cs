@@ -69,7 +69,8 @@ public class Start : FlowState
     /// <returns></returns>
     public override void Entered()
     {
-        base.Entered();
+        base.Entered();        
+
         GraphComponent gc = GameObject.FindObjectOfType(typeof(GraphComponent)) as GraphComponent;
         if (gc != null)
         {

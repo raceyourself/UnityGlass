@@ -46,9 +46,9 @@ public abstract class Platform : SingletonBase
         {
 #if UNITY_EDITOR
             return (Platform)GetInstance<PlatformDummy>();
-#elif UNITY_ANDROID && RACEYOURSELF_MOBILE
+#elif UNITY_ANDROID && RACEYOURSELF_MOBILE            
             return (Platform)GetInstance<MinimalAndroidPlatform>();
-#elif UNITY_ANDROID
+#elif UNITY_ANDROID            
             return (Platform)GetInstance<MinimalAndroidPlatform>();
 #elif UNITY_IPHONE
             return (Platform)GetInstance<IosPlatform>();
@@ -112,8 +112,10 @@ public abstract class Platform : SingletonBase
         // overridden in subclasses to update orientation
 	}   
 
-    public void OnApplicationFocus(bool paused) {
-        if (initialised && paused && OnGlass()) {
+    public void OnApplicationFocus(bool focus) {
+        if (initialised && !focus && OnGlass())
+        {
+            Debug.LogError("OnApplicationFocus made Quit");
             Application.Quit();
         }
 	}

@@ -41,6 +41,9 @@ public class GraphComponent : MonoBehaviour
         if (!initialize)
         {
             initialize = true;
+
+            Application.targetFrameRate = 24;
+
             DataStore.LoadStorage(DataStore.BlobNames.flow);
 
             SetSelectedFlowByName("GlassFlow");
