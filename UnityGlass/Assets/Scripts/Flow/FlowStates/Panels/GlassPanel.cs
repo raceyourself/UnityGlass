@@ -33,14 +33,14 @@ public class GlassPanel : Panel
     {
         base.EnterStart();
 
-        GameObject goData = GameObjectUtils.SearchTreeByName(physicalWidgetRoot, "ExtraData");
+        GameObject goData = GameObjectUtils.SearchTreeByName(physicalWidgetRoot, "ExtraData", true);
         Transform data = goData.transform;
         if (data != null)
         {
             data.gameObject.SetActive(false);
         }
 
-        goData = GameObjectUtils.SearchTreeByName(physicalWidgetRoot, "Distance");
+        goData = GameObjectUtils.SearchTreeByName(physicalWidgetRoot, "Distance", true);
         data = goData.transform;
         if (data != null)
         {
@@ -49,35 +49,37 @@ public class GlassPanel : Panel
             pos.y = 100;
             data.transform.localPosition = pos;
             
-        }         
+        }        
+ 
+
+
     }
 
     public override void StateUpdate()
     {
         base.StateUpdate();
-        return;
         if (Platform.Instance.OnGlass())
         {
-            PlayerOrientation p = Platform.Instance.GetPlayerOrientation();
+            PlayerOrientation p = Platform.Instance.GetPlayerOrientation();            
 
             Quaternion q = p.AsQuaternion();
-            Vector3 rot = q.eulerAngles;
+            Vector3 rot = q.eulerAngles;            
 
             float angle = 360.0f - rot.x;
 
-            if (angle > 25 && angle < 180 )
+            if (angle > 20 && angle < 90 )
             {
                 if (!lookingUp)
                 {
                     lookingUp = true;
-                    GameObject goData = GameObjectUtils.SearchTreeByName(physicalWidgetRoot, "ExtraData");
+                    GameObject goData = GameObjectUtils.SearchTreeByName(physicalWidgetRoot, "ExtraData", true);
                     Transform data = goData.transform;
                     if (data != null)
                     {
                         data.gameObject.SetActive(true);
                     }
 
-                    goData = GameObjectUtils.SearchTreeByName(physicalWidgetRoot, "Distance");
+                    goData = GameObjectUtils.SearchTreeByName(physicalWidgetRoot, "Distance", true);
                     data = goData.transform;
                     if (data != null)
                     {
@@ -95,14 +97,14 @@ public class GlassPanel : Panel
                 if (lookingUp && screenBackDelay <= 0)
                 {
                     lookingUp = false;
-                    GameObject goData = GameObjectUtils.SearchTreeByName(physicalWidgetRoot, "ExtraData");
+                    GameObject goData = GameObjectUtils.SearchTreeByName(physicalWidgetRoot, "ExtraData", true);
                     Transform data = goData.transform;
                     if (data != null)
                     {
                         data.gameObject.SetActive(false);
                     }
 
-                    goData = GameObjectUtils.SearchTreeByName(physicalWidgetRoot, "Distance");
+                    goData = GameObjectUtils.SearchTreeByName(physicalWidgetRoot, "Distance", true);
                     data = goData.transform;
                     if (data != null)
                     {
