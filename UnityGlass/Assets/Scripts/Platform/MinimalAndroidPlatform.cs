@@ -56,6 +56,7 @@ public class MinimalAndroidPlatform : Platform
     public override void Update() 
     {
         base.Update();
+
         try
         {
             // Debug.Log("Getting orientation over JNI");

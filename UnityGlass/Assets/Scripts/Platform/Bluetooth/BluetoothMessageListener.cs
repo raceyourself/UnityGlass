@@ -53,11 +53,11 @@ public class BluetoothMessageListener : MonoBehaviour
                              SetDataVaultInt("player", PLAYER_DATA, CALORIES        , json, Type.none);
 
                 
-                DataVault.Set(AVERAGE_SPEED , "AVERAGE SPEED("+avs+")");
+                DataVault.Set(AVERAGE_SPEED , "AV. SPEED("+avs+")");
                 DataVault.Set(DISTANCE      , "DISTANCE(" + dis + ")");
-                DataVault.Set(ELAPSED_TIME  , "ELAPSED TIME(" + elt + ")");
-                DataVault.Set(CURRENT_SPEED ,  cus );                
-                DataVault.Set(CALORIES      , "CALORIES(kcal)");
+                DataVault.Set(ELAPSED_TIME  , "ELAPSED TIME");
+                DataVault.Set(CURRENT_SPEED , "C. SPEED(" + cus + ")");                
+                DataVault.Set(CALORIES      , "KCAL");
 
                 if (playerIsWinning)
                 {
@@ -107,7 +107,11 @@ public class BluetoothMessageListener : MonoBehaviour
 
     static private string SetDataVaultInt(string prefix, string rootPoint, string dataName, JSONNode json, Type type, out bool isNeg)
     {
-        int value = ReadAsInt(json[rootPoint][dataName]);        
+        JSONNode root = json[rootPoint];
+        int value = root[dataName].AsInt;
+
+        Debug.Log("--::-- " + dataName + " " + value + " from " + root[dataName]);
+
         if (value < 0)
         {
             isNeg = true;
@@ -129,19 +133,19 @@ public class BluetoothMessageListener : MonoBehaviour
                 {
                     v = ((float)value) / 1000.0f;
                     sValue = v.ToString("G3");
-                    unit = "km";
+                    unit = "KM";
                 }
                 else
                 {
                     sValue = value.ToString();
-                    unit = "m";
+                    unit = "M";
                 }
                 break;
 
             case Type.speed:
                 v = ((float)value) / 3600.0f;
                 sValue = v > 0.1f ? v.ToString("G3") : "0";
-                unit = "km/h";                
+                unit = "KM/H";                
                 break;
 
             case Type.time:
@@ -149,21 +153,21 @@ public class BluetoothMessageListener : MonoBehaviour
                 if (value < 60000)
                 {
                     sValue = (int)(value / 1000) + " ";
-                    unit = "sec";                
+                    unit = "SEC";                
                 }
                 else if (value < 60*60000)
                 {
                     int sec = (int)(value / 1000) % 60;
                     int min = (int)(value / 60000);
                     sValue = min+ ":"+sec.ToString("D2");
-                    unit = "min:sec";                
+                    unit = "MIN:SEC";                
                 }
                 else
                 {
                     int min = (int)(value / 60000) % 60;
                     int hr = (int)(value / (60*60000));
                     sValue = hr + ":" + min.ToString("D2");
-                    unit = "hr:min";                
+                    unit = "HR:MIN";                
                 }
                 break;
 
