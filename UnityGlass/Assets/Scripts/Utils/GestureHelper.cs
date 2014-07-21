@@ -2,14 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Diagnostics;
+//using System.Diagnostics;
 using System;
 
 using SimpleJSON;
 
 
 /// <summary>
-/// Touch info. Store index, distance travelled, time for each touch event.
+/// Touch info. Store index, distance traveled, time for each touch event.
 /// </summary>
 public class TouchInfo {
 	public int touchIndex = -1;
@@ -53,7 +53,14 @@ public class GestureHelper : MonoBehaviour {
 
 	public delegate void DownSwipe();
 	public static DownSwipe onSwipeDown = null;
-	
+
+    void Awake()
+    {
+        if (gameObject.name != "Scriptholder")
+        {
+            Debug.LogError("ERROR!: GestureHelper have to be attached to game object named 'Scriptholder'");
+        }
+    }
 	
 	/// <summary>
 	/// Handles the tap message from Java

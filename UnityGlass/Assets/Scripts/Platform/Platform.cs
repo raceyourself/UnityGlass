@@ -82,7 +82,7 @@ public abstract class Platform : SingletonBase
 
 	protected virtual void PostInit()
     {
-		
+        Debug.Log("REMOVE ME!!! 5");
             Debug.Log ("Starting post-init");
             BluetoothServer();
 
@@ -127,8 +127,10 @@ public abstract class Platform : SingletonBase
 
     public void SetMonoBehavioursPartner(PlatformPartner obj)
     {
+        Debug.Log("REMOVE ME!!! 2");
         if (partner == null)
         {
+            Debug.Log("REMOVE ME!!! 3");
             //named object to identify platform game object reprezentation
             //GameObject go = new GameObject("Platform");
             //partner = go.AddComponent<PlatformPartner>();
@@ -136,6 +138,8 @@ public abstract class Platform : SingletonBase
 
             //post initialziation procedure
             partner = obj;
+
+            Debug.Log("REMOVE ME!!! 4");
             PostInit();
         }
     }
