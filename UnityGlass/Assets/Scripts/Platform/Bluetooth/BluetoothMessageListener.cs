@@ -44,12 +44,12 @@ public class BluetoothMessageListener : MonoBehaviour
         switch(json["action"]) 
         {
             case "position_update":                
-                bool playerIsWinning = true;                                            
+                bool playerIsLosing = true;                                            
                 string avs = SetDataVaultInt("player", PLAYER_DATA, AVERAGE_SPEED   , json, Type.speed);
                 string dis = SetDataVaultInt("player", PLAYER_DATA, DISTANCE        , json, Type.distance);
                 string elt = SetDataVaultInt("player", PLAYER_DATA, ELAPSED_TIME    , json, Type.time);
                 string cus = SetDataVaultInt("player", PLAYER_DATA, CURRENT_SPEED   , json, Type.speed);
-                string ahb = SetDataVaultInt("player", PLAYER_DATA, AHEAD_BEHIND    , json, Type.distance, out playerIsWinning);
+                string ahb = SetDataVaultInt("player", PLAYER_DATA, AHEAD_BEHIND    , json, Type.distance, out playerIsLosing);
                              SetDataVaultInt("player", PLAYER_DATA, CALORIES        , json, Type.none);
 
                 
@@ -59,13 +59,13 @@ public class BluetoothMessageListener : MonoBehaviour
                 DataVault.Set(CURRENT_SPEED , "C. SPEED(" + cus + ")");                
                 DataVault.Set(CALORIES      , "KCAL");
 
-                if (playerIsWinning)
+                if (playerIsLosing)
                 {
-                    DataVault.Set(AHEAD_BEHIND, ahb + " AHEAD");
+                    DataVault.Set(AHEAD_BEHIND, ahb + " BEHIND");
                 }
                 else
                 {
-                    DataVault.Set(AHEAD_BEHIND, ahb + " BEHIND");
+                    DataVault.Set(AHEAD_BEHIND, ahb + " AHEAD");                    
                 }
 
                 break;
