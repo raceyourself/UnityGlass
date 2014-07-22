@@ -198,6 +198,7 @@
     <Compile Include="Assets\Scripts\Backend\DataStorage\DataVault.cs" />
     <Compile Include="Assets\Scripts\Backend\DataStorage\GameRestorableObject.cs" />
     <Compile Include="Assets\Scripts\Backend\DataStorage\GameStateRestorable.cs" />
+    <Compile Include="Assets\Scripts\Backend\DataStorage\IDataVaultListener.cs" />
     <Compile Include="Assets\Scripts\Backend\DataStorage\Storage.cs" />
     <Compile Include="Assets\Scripts\Backend\UI\ComponentScripts\SerializableSettings.cs" />
     <Compile Include="Assets\Scripts\Backend\UI\ComponentScripts\SerializableTransform.cs" />
@@ -215,7 +216,9 @@
     <Compile Include="Assets\Scripts\Flow\FlowStateMachine.cs" />
     <Compile Include="Assets\Scripts\Flow\FlowStates\Exit.cs" />
     <Compile Include="Assets\Scripts\Flow\FlowStates\ForwardingState.cs" />
+    <Compile Include="Assets\Scripts\Flow\FlowStates\GamePlayManagerState.cs" />
     <Compile Include="Assets\Scripts\Flow\FlowStates\Panel.cs" />
+    <Compile Include="Assets\Scripts\Flow\FlowStates\Panels\ConnectYourGlass.cs" />
     <Compile Include="Assets\Scripts\Flow\FlowStates\Panels\GlassPanel.cs" />
     <Compile Include="Assets\Scripts\Flow\FlowStates\Panels\PausePanel.cs" />
     <Compile Include="Assets\Scripts\Flow\FlowStates\Panels\TapSwipePanel.cs" />

@@ -20,7 +20,7 @@ public class BasicLabelEditor : Editor
             EditorGUILayout.LabelField("Component Label");
             string l = script.label;
             script.label = EditorGUILayout.TextArea(script.label);
-            if (l != script.label) script.Apply();
+            if (l != script.label) script.Apply(l);
         EditorGUILayout.EndHorizontal();
     }
 

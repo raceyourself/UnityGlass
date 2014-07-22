@@ -40,8 +40,8 @@ public class DataVault : MonoBehaviour
     const string ENDING_BRACKET = ">";    
 
     static public Dictionary<string, DataEntry> data;
-    static public Dictionary<string, List<UIComponentSettings>> registeredListeners;
-    static public Dictionary<UIComponentSettings, List<string>> registrationRecord;
+    static public Dictionary<string, List<IDataVaultListener>> registeredListeners; //remembers links: data -> list of instances, and easy way to track which instances listen to this data
+    static public Dictionary<IDataVaultListener, List<string>> registrationRecord;  //remembers links: instance -> list of data, an easy way to track if instance is anywhere and where is registered
     
 
     /// <summary>
@@ -109,8 +109,8 @@ public class DataVault : MonoBehaviour
         if (data != null) return;
 
         data = new Dictionary<string, DataEntry>();
-        registeredListeners = new Dictionary<string, List<UIComponentSettings>>();
-        registrationRecord = new Dictionary<UIComponentSettings, List<string>>();
+        registeredListeners = new Dictionary<string, List<IDataVaultListener>>();
+        registrationRecord = new Dictionary<IDataVaultListener, List<string>>();
 
         Storage s = DataStore.GetStorage(DataStore.BlobNames.persistent);
         if (s == null) return;
@@ -206,7 +206,7 @@ public class DataVault : MonoBehaviour
                 !((newValue == typeof(double) && stored == typeof(float)) || (newValue == typeof(float) && stored == typeof(double))) //its not double to float casting by any chance?
                 )
             {
-                Debug.LogError("Trying to change type of stored variable. It is a bad practice to do so. If you did not chnged type maybe its the system wrongly processing data provided?");
+                Debug.LogError("Trying to change type of stored variable. It is a bad practice to do so. If you did not changed type maybe its the system wrongly processing data provided?");
             }
 
             de.storedValue = value;
@@ -214,16 +214,17 @@ public class DataVault : MonoBehaviour
         else
         {
             data[name] = new DataEntry(value, false);
-        }
+        }        
 
         if (registeredListeners.ContainsKey(name))
-        {
-            List<UIComponentSettings> list = registeredListeners[name];
+        {            
+            List<IDataVaultListener> list = registeredListeners[name];
+
             if (list != null)
             {
-                foreach (UIComponentSettings listener in list)
-                {
-                    listener.Apply();// .SetTranslatedText(false);
+                foreach (IDataVaultListener listener in list)
+                {                    
+                    listener.Apply(name);
                 }
             }
         }                
@@ -304,6 +305,23 @@ public class DataVault : MonoBehaviour
         return o == null ? string.Empty : o.ToString();
     }
 
+    static public bool GetBool(string name)
+    {
+        if (data == null)
+        {
+            Initialize();
+        }
+
+        if (!data.ContainsKey(name))
+        {
+            return false;
+        }
+
+        object o = data[name].storedValue;
+
+        return o is bool ? (bool)o : false;
+    }
+
     /// <summary>
     /// removes record of the variable
     /// </summary>
@@ -330,7 +348,7 @@ public class DataVault : MonoBehaviour
     /// <param name="source">string to get translated</param>
     /// <param name="registerForUpdates">if provided, object would get informed when changes to variables are made those which were used for translations</param>
     /// <returns>translated values</returns>
-    static public string Translate(string source, UIComponentSettings registerForUpdates)
+    static public string Translate(string source, IDataVaultListener registerForUpdates)
     {
         return Translate(source, 0, registerForUpdates);
     }
@@ -342,7 +360,7 @@ public class DataVault : MonoBehaviour
     /// <param name="startingPoint">offset search would start from</param>
     /// <param name="registerForUpdates">if provided, object would get informed when changes to variables are made those which were used for translations</param>
     /// <returns>translated values</returns>    
-    static public string Translate(string source, int startingPoint, UIComponentSettings registerForUpdates)
+    static public string Translate(string source, int startingPoint, IDataVaultListener registerForUpdates)
     {
         if (startingPoint >= source.Length) return source;
 
@@ -354,14 +372,15 @@ public class DataVault : MonoBehaviour
             end = source.IndexOf(ENDING_BRACKET, start);            
             if (end > -1)
             {
-                source = Translate(source, end, registerForUpdates);
+                //no recurent translations
+                //source = Translate(source, end, registerForUpdates);
 
                 int dataStart = start + STARTING_BRACKET.Length;
                 string dataName = source.Substring(dataStart, end - dataStart);
                 string newSection = "";
                 if (dataName.Length > 0)
                 {
-                    RegisterListner(registerForUpdates, dataName);
+                    if (registerForUpdates != null) RegisterListner(registerForUpdates, dataName);
 
                     //find translated word
                     System.Object obj = Get(dataName);
@@ -393,18 +412,21 @@ public class DataVault : MonoBehaviour
     /// <param name="listner">object which would get informed when variable changes</param>
     /// <param name="identifier">iidentofier which would be used for registration, any change to variable with this name would make listner informed</param>
     /// <returns></returns>
-    static public void RegisterListner(UIComponentSettings listner, string identifier)
+    static public void RegisterListner(IDataVaultListener listner, string identifier)
     {
         if (registeredListeners != null && registrationRecord != null &&
             listner != null && identifier != null && identifier.Length > 0)
         {
+            Debug.Log("RegisterListner for "+identifier);
             if (!registeredListeners.ContainsKey(identifier))
             {
-                registeredListeners[identifier] = new List<UIComponentSettings>();
+                Debug.LogError("registeredListeners[identifier] " + identifier);
+                registeredListeners[identifier] = new List<IDataVaultListener>();
             }
 
             if (!registeredListeners[identifier].Contains(listner))
             {
+                Debug.LogError("registeredListeners[identifier].Add(listner) " + identifier);
                 registeredListeners[identifier].Add(listner);
             }
 
@@ -418,6 +440,13 @@ public class DataVault : MonoBehaviour
                 registrationRecord[listner].Add(identifier);
             }
         }
+        else
+        {
+            Debug.LogError("DataVault Registration failed (?? data == null)" + (data == null) + " for "+identifier +
+                " registeredListeners " + (registeredListeners==null) +
+                " registrationRecord " + (registrationRecord == null) +
+                " listner " + (listner == null));
+        }
     }
 
     /// <summary>
@@ -425,7 +454,7 @@ public class DataVault : MonoBehaviour
     /// </summary>
     /// <param name="listner">listrner previously listening for events</param>
     /// <returns></returns>
-    static public void UnRegisterListner(UIComponentSettings listner)
+    static public void UnRegisterListner(IDataVaultListener listner)
     {
         if (registrationRecord != null && registeredListeners != null && listner != null)
         {

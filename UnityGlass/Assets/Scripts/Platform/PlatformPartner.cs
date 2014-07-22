@@ -31,6 +31,7 @@ public class PlatformPartner : MonoBehaviour
     public void OnApplicationQuit()
     {
         Debug.Log("Quit order received");
+        Platform.Instance.BluetoothActionBroadcast("quit", true);
         Platform.Instance.OnApplicationQuit();
     }
 

@@ -6,7 +6,7 @@ using System.Collections;
 /// Basic label is a class which finds single label in child structure of attached Game Object and links itself there for display information management and linking with database and flow settings
 /// </summary>
 [ExecuteInEditMode]
-public class UIBasiclabel : UIComponentSettings 
+public class UIBasiclabel : UIComponentSettings, IDataVaultListener
 {
 	
 	public string label;
@@ -64,9 +64,9 @@ public class UIBasiclabel : UIComponentSettings
     /// requests translated value of the label variabe and sets it label component
     /// </summary>
     /// <returns></returns>
-    override public void Apply()
+    override public void Apply(string identifier)
     {
-        base.Apply();
+        base.Apply(identifier);
         SetTranslatedText(false);
     }
 

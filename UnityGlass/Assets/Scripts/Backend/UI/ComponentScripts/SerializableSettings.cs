@@ -102,7 +102,7 @@ public class SerializableSettings : ISerializable
                 }
             }
 
-            UIComponentSettings cs = c as UIComponentSettings;
+            IDataVaultListener cs = c as IDataVaultListener;
             if (cs != null)
             {
                 cs.Register();                

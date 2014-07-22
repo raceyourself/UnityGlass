@@ -4,24 +4,23 @@ using System.Collections;
 /// <summary>
 /// generic component class for data forwarding into deeper parts of the prefab construction. 
 /// </summary>
-public class UIComponentSettings : MonoBehaviour 
-{		
-    
+public class UIComponentSettings : MonoBehaviour, IDataVaultListener
+{
+
     /// <summary>
-    /// This function is called every time we want to update component registered attributes
+    /// apply is called as soon new value of the registered listener is recorded
     /// </summary>
     /// <returns></returns>
-    virtual public void Apply()
+    public virtual void Apply(string identifier)
     {
 
     }
 
     /// <summary>
-    /// This function is called once at the beginning of script live to ensure everything is ready and can respond to registrar call. 
-    /// For example this is the moment component might register for database events
+    /// is called when data listener is about to get registered
     /// </summary>
     /// <returns></returns>
-    virtual public void Register()
+    public virtual void Register()
     {
 
     }
@@ -30,7 +29,7 @@ public class UIComponentSettings : MonoBehaviour
     /// unregisters component from database events
     /// </summary>
     /// <returns></returns>
-    protected virtual void OnDestroy()
+    public virtual void OnDestroy()
     {
         DataVault.UnRegisterListner(this);
     }

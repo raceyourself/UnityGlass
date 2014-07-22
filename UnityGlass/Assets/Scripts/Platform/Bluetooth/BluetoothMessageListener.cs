@@ -19,6 +19,11 @@ public class BluetoothMessageListener : MonoBehaviour
     const string AHEAD_BEHIND   = "ahead_behind";    
     #endregion
 
+    public const string MESSAGE_BT_CONNECTED = "bluetooth_connected"; //this is not an action
+    public const string MESSAGE_POSITION_UPDATE = "position_update";
+    public const string MESSAGE_FINISH_RACE = "finish_race";
+    
+
     enum Type
     {
         none,
@@ -43,15 +48,17 @@ public class BluetoothMessageListener : MonoBehaviour
 
         switch(json["action"]) 
         {
-            case "position_update":                
-                bool playerIsLosing = true;                                            
+            case MESSAGE_POSITION_UPDATE:
+                bool playerIsLosing = true;
+
+                DataVault.Set("player_ahead_value", json[PLAYER_DATA][AHEAD_BEHIND]);
+
                 string avs = SetDataVaultInt("player", PLAYER_DATA, AVERAGE_SPEED   , json, Type.speed);
                 string dis = SetDataVaultInt("player", PLAYER_DATA, DISTANCE        , json, Type.distance);
                 string elt = SetDataVaultInt("player", PLAYER_DATA, ELAPSED_TIME    , json, Type.time);
                 string cus = SetDataVaultInt("player", PLAYER_DATA, CURRENT_SPEED   , json, Type.speed);
                 string ahb = SetDataVaultInt("player", PLAYER_DATA, AHEAD_BEHIND    , json, Type.distance, out playerIsLosing);
                              SetDataVaultInt("player", PLAYER_DATA, CALORIES        , json, Type.none);
-
                 
                 DataVault.Set(AVERAGE_SPEED , "AV. SPEED("+avs+")");
                 DataVault.Set(DISTANCE      , "DISTANCE(" + dis + ")");
@@ -70,13 +77,21 @@ public class BluetoothMessageListener : MonoBehaviour
 
                 break;
 
+            case MESSAGE_FINISH_RACE:
+                DataVault.Set(MESSAGE_FINISH_RACE, true);
+                UnityEngine.Debug.Log("Platform: finish_race Bluetooth message: " + json.ToString());       
+                break;
+
             default:
                 UnityEngine.Debug.Log("Platform: unknown Bluetooth message: " + json.ToString());                
                 break;
         }        
     }
 
-    public void OnBluetoothConnect(string message) {
+    public void OnBluetoothConnect(string message) 
+    {
+        Debug.Log("BT Connected!");
+        DataVault.Set(MESSAGE_BT_CONNECTED, true);
     }
 
     public void OnBluetoothMessage(string message) {
@@ -108,9 +123,9 @@ public class BluetoothMessageListener : MonoBehaviour
     static private string SetDataVaultInt(string prefix, string rootPoint, string dataName, JSONNode json, Type type, out bool isNeg)
     {
         JSONNode root = json[rootPoint];
+        
         int value = root[dataName].AsInt;
-
-        Debug.Log("--::-- " + dataName + " " + value + " from " + root[dataName]);
+        if (value == 0) value = (int)root[dataName].AsFloat;
 
         if (value < 0)
         {

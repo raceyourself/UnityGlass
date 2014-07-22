@@ -199,6 +199,30 @@ public abstract class Platform : SingletonBase
 
     public abstract string[] BluetoothPeers ();
 
+    public void BluetoothActionBroadcast(string action, object value)
+    {
+        SimpleJSON.JSONNode j = new SimpleJSON.JSONNode();
+
+        SimpleJSON.JSONData data;
+        if (value is string)
+            data = new SimpleJSON.JSONData((string)value);
+        else if (value is int)
+            data = new SimpleJSON.JSONData((int)value);
+        else if (value is float)
+            data = new SimpleJSON.JSONData((float)value);
+        else if (value is bool)
+            data = new SimpleJSON.JSONData((bool)value);
+        else
+        {
+            Debug.LogError("Unknown value tried to be send over BT!");
+            return;
+        }
+        
+        j.Add(action, data);
+
+        BluetoothBroadcast(j.ToString());
+    }
+
 
 	public virtual byte[] ReadAssets(string filename) 
 	{

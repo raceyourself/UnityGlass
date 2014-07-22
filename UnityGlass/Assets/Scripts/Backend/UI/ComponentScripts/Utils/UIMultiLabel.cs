@@ -6,8 +6,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Multi label is a class which finds labels in child structure of attached Game Object and links itself there for linking with database
 /// </summary>
-[ExecuteInEditMode]
-public class UIMultiLabel : UIComponentSettings 
+public class UIMultiLabel : UIComponentSettings, IDataVaultListener
 {
 	
 	private string[] labelsStrings;
@@ -25,7 +24,7 @@ public class UIMultiLabel : UIComponentSettings
             labelsStrings = new string[labelInstances.Length];
             UpdateFromLabels();
             Register();
-            Apply();
+            Apply("");
         }
 	}
 	
@@ -63,10 +62,10 @@ public class UIMultiLabel : UIComponentSettings
     /// requests translated value of the label variable and sets it label component
     /// </summary>
     /// <returns></returns>
-    override public void Apply()
+    override public void Apply(string identifier)
     {
-        base.Apply();
-        SetTranslatedText(false);
+        base.Apply(identifier);
+        SetTranslatedText(false, identifier);
     }
 
     /// <summary>
@@ -86,9 +85,18 @@ public class UIMultiLabel : UIComponentSettings
     /// <returns></returns>
     public void SetTranslatedText(bool register)
     {
+        SetTranslatedText(register, "");
+    }
+
+    public void SetTranslatedText(bool register, string identifier)
+    {
+        string compositID = "<db_" + identifier + ">";
         for (int i = 0; i < labelsStrings.Length; i++)
         {
-            SetLabel(DataVault.Translate(labelsStrings[i], register ? this : null), i);
+            if (identifier == "" || labelsStrings[i] == compositID)
+            {
+                SetLabel(DataVault.Translate(labelsStrings[i], register ? this : null), i);
+            }
         }
     }
 }

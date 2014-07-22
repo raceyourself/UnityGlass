@@ -28,7 +28,7 @@ public class ColourEditor : Editor
                 script.b = newColor.b;
                 script.a = newColor.a;
 
-                script.Apply();
+                script.Apply("");
             }
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.BeginHorizontal();

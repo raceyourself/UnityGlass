@@ -6,7 +6,8 @@ using System;
 /// component introducing string system for color representation. Used for database based color update
 /// </summary>
 [ExecuteInEditMode]
-public class UIColour : UIComponentSettings {
+public class UIColour : UIComponentSettings, IDataVaultListener
+{
 	
 	//colour constants
 	public const string green = "009540FF";
@@ -162,9 +163,9 @@ public class UIColour : UIComponentSettings {
     /// tries to load color form database and then set it to sprite component
     /// </summary>
     /// <returns></returns>
-    override public void Apply()
+    override public void Apply(string identifier)
     {
-        base.Apply();
+        base.Apply(identifier);
         UpdateFromDatabase();
         SetColour(GetColor());
     }
@@ -181,7 +182,7 @@ public class UIColour : UIComponentSettings {
             DataVault.RegisterListner(this, databaseIDName);
         }
 
-        Apply();
+        Apply(databaseIDName);
     }
 
     /// <summary>

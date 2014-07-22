@@ -7,7 +7,7 @@ using System;
 /// component introducing string system for color representation. Used for database based color update
 /// </summary>
 [ExecuteInEditMode]
-public class UIColouredNeighbourWidget : UIComponentSettings
+public class UIColouredNeighbourWidget : UIComponentSettings, IDataVaultListener
 {
 	private UIWidget widgetInstance;
 
@@ -155,7 +155,7 @@ public class UIColouredNeighbourWidget : UIComponentSettings
     /// tries to load color form database and then set it to sprite component
     /// </summary>
     /// <returns></returns>
-    override public void Apply()
+    override public void Apply(string identifier)
     {
         //we don't want color functionality which makes us skip base.apply
         //base.Apply();
@@ -176,7 +176,7 @@ public class UIColouredNeighbourWidget : UIComponentSettings
             DataVault.RegisterListner(this, databaseIDName);
         }
 
-        Apply();
+        Apply(databaseIDName);
     }
 
     /// <summary>

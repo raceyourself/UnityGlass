@@ -8,6 +8,7 @@ using System.Runtime.Serialization;
 public class PausePanel : TapSwipePanel {
 	
     static protected string screenInputLock = "Pause";
+    static protected string dataValultForcedPause = "force_pause_game";
 
 	public PausePanel() {}
     public PausePanel(SerializationInfo info, StreamingContext ctxt)
@@ -20,6 +21,34 @@ public class PausePanel : TapSwipePanel {
         base.EnterStart();
 
         physicalWidgetRoot.SetActive(false);
+
+        DataVault.RegisterListner(this, dataValultForcedPause);
+        Apply(dataValultForcedPause);
+    }
+
+    public override void Apply(string identifier)
+    {
+        base.Apply(identifier);
+
+        bool value = DataVault.GetBool(dataValultForcedPause);
+        ShowGraphic(value);        
+    }
+
+    private void ShowGraphic(bool visible)
+    {
+        if (visible == false && physicalWidgetRoot.activeSelf == true)
+        {
+            physicalWidgetRoot.SetActive(false);
+            DataVault.Set(LOCK_NAME, tempLock);
+            Platform.Instance.BluetoothActionBroadcast("pause", false);
+
+        }
+        else if (visible == true && physicalWidgetRoot.activeSelf == false)
+        {
+            physicalWidgetRoot.SetActive(true);
+            DataVault.Set(LOCK_NAME, screenInputLock);
+            Platform.Instance.BluetoothActionBroadcast("pause", true);
+        }
     }
 
     public override void DefineHandlers()
@@ -32,11 +61,7 @@ public class PausePanel : TapSwipePanel {
                 return;
             }
 
-            if (physicalWidgetRoot.activeSelf == true )
-            {
-                physicalWidgetRoot.SetActive(false);
-                DataVault.Set(LOCK_NAME, tempLock);
-            }
+            ShowGraphic(false);
 		});
 
         downHandler = new GestureHelper.DownSwipe(() =>
@@ -49,8 +74,7 @@ public class PausePanel : TapSwipePanel {
 
             if (physicalWidgetRoot.activeSelf != true)
             {
-                physicalWidgetRoot.SetActive(true);
-                DataVault.Set(LOCK_NAME, screenInputLock); 
+                ShowGraphic(true);
             }
             else
             {

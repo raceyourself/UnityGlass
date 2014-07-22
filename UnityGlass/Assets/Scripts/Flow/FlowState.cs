@@ -10,7 +10,7 @@ using System.Reflection;
 /// <summary>
 /// single generic state of the flow
 /// </summary>
-public abstract class FlowState : GNode
+public abstract class FlowState : GNode, IDataVaultListener
 {
     public enum State
     {
@@ -446,4 +446,22 @@ public abstract class FlowState : GNode
         UpdateSize();
     }
 
+
+    public virtual void Register()
+    {
+
+    }
+
+    public virtual void Apply(string identifier)
+    {
+    }
+
+    /// <summary>
+    /// unregisters component from database events
+    /// </summary>
+    /// <returns></returns>
+    public virtual void OnDestroy()
+    {
+        DataVault.UnRegisterListner(this);
+    }
 }

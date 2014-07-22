@@ -299,7 +299,7 @@ public class MinimalAndroidPlatform : Platform
         {
             Debug.LogError(e + "JNI BluetoothBroadcast() failed");
         }
-    }
+    }    
 
     public override string[] BluetoothPeers() {
         try
