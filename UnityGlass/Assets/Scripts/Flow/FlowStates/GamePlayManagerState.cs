@@ -11,6 +11,13 @@ using System.Runtime.Serialization;
 public class GamePlayManagerState : FlowState
 {
     private GameObject model;
+    //private int lastTimeStamp;
+   // private float speed;
+
+    private Vector3 target;
+    private float speed;
+    
+    //private 
 
     /// <summary>
     /// default constructor
@@ -47,8 +54,23 @@ public class GamePlayManagerState : FlowState
         base.Entered();
 
         model = GameObject.Instantiate(Resources.Load("David")) as GameObject;
+
+        Animator a = model.GetComponent<Animator>();
+        a.SetBool("Running", true);
+
         DataVault.RegisterListner(this, "player_ahead_value");
         DataVault.RegisterListner(this, "finish_race");
+    }
+
+    public override void StateUpdate()
+    {        
+        base.StateUpdate();
+
+        if (model != null)
+        {
+            Vector3 pos = model.transform.position;
+            model.transform.position = pos + new Vector3(0, 0, speed);
+        }
     }
 
     public override void Apply(string identifier)
@@ -56,10 +78,15 @@ public class GamePlayManagerState : FlowState
         switch (identifier)
         {
             case "player_ahead_value":
+                Debug.Log("Apply for player_ahead_value");
                 object value = DataVault.Get("player_ahead_value");
-                if (model != null && (value is int))
+                if (model != null && (value is float))
                 {
-                    model.transform.position = new Vector3(0, 0, -((int)value));
+                    Debug.Log("set model position! with "+value);
+                    Vector3 newTarget = new Vector3(0, 0, -((float)value));
+
+                    //interpolate over 30 frames
+                    speed = (newTarget - target).z / 30.0f;
                 }
                 break;
 

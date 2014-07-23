@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{95BC19D3-B6E3-1B62-A479-6D5658ADB3BF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace></RootNamespace>
+    <AssemblyName>Assembly-CSharp-firstpass</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Unity Full v3.5</TargetFrameworkProfile>
+    <CompilerResponseFile></CompilerResponseFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Temp\UnityVS_bin\Debug\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants>DEBUG;TRACE;UNITY_4_5_2;UNITY_4_5;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;UNITY_ANDROID_API;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;DEVELOPMENT_BUILD;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_PRO_LICENSE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Temp\UnityVS_bin\Release\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants>TRACE;UNITY_4_5_2;UNITY_4_5;UNITY_ANDROID;ENABLE_MICROPHONE;ENABLE_TEXTUREID_MAP;ENABLE_UNITYEVENTS;ENABLE_NEW_HIERARCHY ;ENABLE_AUDIO_FMOD;ENABLE_MONO;ENABLE_TERRAIN;ENABLE_SUBSTANCE;ENABLE_GENERICS;INCLUDE_WP8SUPPORT;ENABLE_WWW;ENABLE_IMAGEEFFECTS;ENABLE_WEBCAM;INCLUDE_METROSUPPORT;RENDER_SOFTWARE_CURSOR;ENABLE_NETWORK;ENABLE_PHYSICS;ENABLE_CACHING;ENABLE_CLOTH;UNITY_ANDROID_API;ENABLE_2D_PHYSICS;ENABLE_SHADOWS;ENABLE_AUDIO;ENABLE_NAVMESH_CARVING;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;DEVELOPMENT_BUILD;ENABLE_PROFILER;UNITY_EDITOR;UNITY_EDITOR_WIN;UNITY_PRO_LICENSE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Core" />
+    <Reference Include="Boo.Lang" />
+    <Reference Include="UnityScript.Lang" />
+    <Reference Include="UnityEngine">
+      <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor">
+      <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="JsonDotNet">
+      <HintPath>Assets\Plugins\JsonDotNet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Plugins\GoKit\base\AbstractGoTween.cs" />
+    <Compile Include="Assets\Plugins\GoKit\base\AbstractGoTweenCollection.cs" />
+    <Compile Include="Assets\Plugins\GoKit\easing\GoEaseBack.cs" />
+    <Compile Include="Assets\Plugins\GoKit\easing\GoEaseBounce.cs" />
+    <Compile Include="Assets\Plugins\GoKit\easing\GoEaseCircular.cs" />
+    <Compile Include="Assets\Plugins\GoKit\easing\GoEaseCubic.cs" />
+    <Compile Include="Assets\Plugins\GoKit\easing\GoEaseElastic.cs" />
+    <Compile Include="Assets\Plugins\GoKit\easing\GoEaseExponential.cs" />
+    <Compile Include="Assets\Plugins\GoKit\easing\GoEaseLinear.cs" />
+    <Compile Include="Assets\Plugins\GoKit\easing\GoEaseQuadratic.cs" />
+    <Compile Include="Assets\Plugins\GoKit\easing\GoEaseQuartic.cs" />
+    <Compile Include="Assets\Plugins\GoKit\easing\GoEaseQuintic.cs" />
+    <Compile Include="Assets\Plugins\GoKit\easing\GoEaseSinusoidal.cs" />
+    <Compile Include="Assets\Plugins\GoKit\enums\GoDuplicatePropertyRuleType.cs" />
+    <Compile Include="Assets\Plugins\GoKit\enums\GoEaseType.cs" />
+    <Compile Include="Assets\Plugins\GoKit\enums\GoLogLevel.cs" />
+    <Compile Include="Assets\Plugins\GoKit\enums\GoLookAtType.cs" />
+    <Compile Include="Assets\Plugins\GoKit\enums\GoLoopType.cs" />
+    <Compile Include="Assets\Plugins\GoKit\enums\GoShakeType.cs" />
+    <Compile Include="Assets\Plugins\GoKit\enums\GoSplineType.cs" />
+    <Compile Include="Assets\Plugins\GoKit\enums\GoTweenState.cs" />
+    <Compile Include="Assets\Plugins\GoKit\enums\GoUpdateType.cs" />
+    <Compile Include="Assets\Plugins\GoKit\extensions\GoKitTweenExtensions.cs" />
+    <Compile Include="Assets\Plugins\GoKit\Go.cs" />
+    <Compile Include="Assets\Plugins\GoKit\GoDummyPath.cs" />
+    <Compile Include="Assets\Plugins\GoKit\GoTween.cs" />
+    <Compile Include="Assets\Plugins\GoKit\GoTweenChain.cs" />
+    <Compile Include="Assets\Plugins\GoKit\GoTweenCollectionConfig.cs" />
+    <Compile Include="Assets\Plugins\GoKit\GoTweenConfig.cs" />
+    <Compile Include="Assets\Plugins\GoKit\GoTweenFlow.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\abstracts\AbstractColorTweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\abstracts\AbstractQuaternionTweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\abstracts\AbstractTweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\abstracts\AbstractVector3TweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\ColorTweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\FloatTweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\IGenericProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\IntTweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\Vector2TweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\Vector3PathTweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\Vector3TweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\Vector3XTweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\Vector3YTweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\Vector3ZTweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\genericTypes\Vector4TweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\GoTweenUtils.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\smoothing\GoSmoothedQuaternion.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\smoothing\GoSmoothedVector3.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\smoothing\GoSmoothingType.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\specificTypes\EulerAnglesTweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\specificTypes\MaterialColorTweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\specificTypes\PositionPathTweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\specificTypes\PositionTweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\specificTypes\RotationQuaternionTweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\specificTypes\RotationTweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\specificTypes\ScalePathTweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\specificTypes\ScaleTweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\specificTypes\ShakeTweenProperty.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\splines\AbstractGoSplineSolver.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\splines\GoSpline.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\splines\GoSplineCatmullRomSolver.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\splines\GoSplineCubicBezierSolver.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\splines\GoSplineQuadraticBezierSolver.cs" />
+    <Compile Include="Assets\Plugins\GoKit\properties\splines\GoSplineStraightLineSolver.cs" />
+    <None Include="Assets\Fonts\RobotoRegular100.txt" />
+    <None Include="Assets\Fonts\RobotoRegular48.txt" />
+    <None Include="Assets\GraphEditor\Readme.txt" />
+    <None Include="Assets\NGUI\Examples\Atlases\Fantasy\Fantasy Font - Normal.txt" />
+    <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Header.txt" />
+    <None Include="Assets\NGUI\Examples\Atlases\Refractive\Refractive Font - Normal.txt" />
+    <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Header.txt" />
+    <None Include="Assets\NGUI\Examples\Atlases\SciFi\SciFi Font - Normal.txt" />
+    <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo14.txt" />
+    <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo18.txt" />
+    <None Include="Assets\NGUI\Examples\Atlases\Wooden\Arimo20.txt" />
+    <None Include="Assets\NGUI\Examples\Models\Orc Armor\Orc Armor.shader" />
+    <None Include="Assets\NGUI\Examples\Models\Orc\Orc Skin.shader" />
+    <None Include="Assets\NGUI\Examples\Resources\Localization.txt" />
+    <None Include="Assets\NGUI\Examples\Shaders\Refractive.shader" />
+    <None Include="Assets\NGUI\Examples\Shaders\Unlit - Additive Colored.shader" />
+    <None Include="Assets\NGUI\Examples\Shaders\Unlit - Depth Cutout.shader" />
+    <None Include="Assets\NGUI\Examples\Shaders\Unlit - Depth.shader" />
+    <None Include="Assets\NGUI\Examples\Shaders\Unlit - Masked Colored.shader" />
+    <None Include="Assets\NGUI\ReadMe - 3.6.8.txt" />
+    <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored 1.shader" />
+    <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored 2.shader" />
+    <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored 3.shader" />
+    <None Include="Assets\NGUI\Resources\Shaders\Unlit - Premultiplied Colored.shader" />
+    <None Include="Assets\NGUI\Resources\Shaders\Unlit - Text 1.shader" />
+    <None Include="Assets\NGUI\Resources\Shaders\Unlit - Text 2.shader" />
+    <None Include="Assets\NGUI\Resources\Shaders\Unlit - Text 3.shader" />
+    <None Include="Assets\NGUI\Resources\Shaders\Unlit - Text.shader" />
+    <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored 1.shader" />
+    <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored 2.shader" />
+    <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored 3.shader" />
+    <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Colored.shader" />
+    <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Packed 1.shader" />
+    <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Packed 2.shader" />
+    <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Packed 3.shader" />
+    <None Include="Assets\NGUI\Resources\Shaders\Unlit - Transparent Packed.shader" />
+    <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
+    <None Include="Assets\Plugins\Android\res\layout\activity_authentication.xml" />
+    <None Include="Assets\Plugins\Android\res\layout\orientation_helper.xml" />
+    <None Include="Assets\Plugins\Android\res\layout\test_layout.xml" />
+    <None Include="Assets\Plugins\Android\res\layout-land\activity_authentication.xml" />
+    <None Include="Assets\Plugins\Android\res\layout-land\orientation_helper.xml" />
+    <None Include="Assets\Plugins\Android\res\menu\authentication.xml" />
+    <None Include="Assets\Plugins\Android\res\values\dimens.xml" />
+    <None Include="Assets\Plugins\Android\res\values\strings.xml" />
+    <None Include="Assets\Plugins\Android\res\values\styles.xml" />
+    <None Include="Assets\Plugins\Android\res\values\version.xml" />
+    <None Include="Assets\Plugins\Android\res\values-sw600dp\dimens.xml" />
+    <None Include="Assets\Plugins\Android\res\values-sw720dp-land\dimens.xml" />
+    <None Include="Assets\Plugins\Android\res\values-v11\styles.xml" />
+    <None Include="Assets\Plugins\Android\res\values-v14\styles.xml" />
+    <None Include="Assets\Plugins\Android\res\xml\voice_trigger.xml" />
+    <None Include="Assets\Plugins\GoKit\easing\easeEquationsLicense.txt" />
+    <None Include="Assets\Plugins\JsonDotNet.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />
+</Project>

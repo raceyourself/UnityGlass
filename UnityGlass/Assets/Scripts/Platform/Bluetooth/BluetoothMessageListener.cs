@@ -44,14 +44,14 @@ public class BluetoothMessageListener : MonoBehaviour
         UnityEngine.Debug.Log("Platform: OnBluetoothJson ");
        
         //test debug data:
-        UnityEngine.Debug.Log("Platform: Bluetooth message: " + json.ToString());        
+        //UnityEngine.Debug.Log("Platform: Bluetooth message: " + json.ToString());        
 
         switch(json["action"]) 
         {
             case MESSAGE_POSITION_UPDATE:
                 bool playerIsLosing = true;
 
-                DataVault.Set("player_ahead_value", json[PLAYER_DATA][AHEAD_BEHIND]);
+                DataVault.Set("player_ahead_value", json[PLAYER_DATA][AHEAD_BEHIND].AsFloat);
 
                 string avs = SetDataVaultInt("player", PLAYER_DATA, AVERAGE_SPEED   , json, Type.speed);
                 string dis = SetDataVaultInt("player", PLAYER_DATA, DISTANCE        , json, Type.distance);
@@ -96,7 +96,7 @@ public class BluetoothMessageListener : MonoBehaviour
 
     public void OnBluetoothMessage(string message) {
         //      MessageWidget.AddMessage("Bluetooth", message, "settings"); // DEBUG
-        UnityEngine.Debug.Log("Platform: OnBluetoothMessage " + message.Length + "B"); 
+        //UnityEngine.Debug.Log("Platform: OnBluetoothMessage " + message.Length + "B"); 
         JSONNode json = JSON.Parse(message);
         OnBluetoothJson(json);
     }
