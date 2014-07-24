@@ -47,4 +47,28 @@ public class ButtonFunctionCollection
         return true;
     }
 
+    static public bool IsEULARequired(FlowButton button, FlowState panel)
+    {
+        object o = DataVault.Get("eula_done");
+        if (o != null)
+        {
+            if (Convert.ToBoolean(o))
+            {
+                panel.ConnectionWithCall("SkipEULA");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    static public bool SetEULADone(FlowButton button, FlowState panel)
+    {
+        DataVault.Set("eula_done", true);
+        DataVault.SetPersistency("eula_done", true);
+        DataVault.SaveToBlob();
+
+        return true;
+    }
+
 }

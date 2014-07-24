@@ -18,3 +18,5 @@ RaceControls
 UIComponents/NewGlass/RaceControls
 GlassHUD
 UIComponents/NewGlass/GlassHUD
+SumaryScreen
+UIComponents/NewGlass/SumaryScreen

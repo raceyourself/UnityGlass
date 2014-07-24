@@ -86,7 +86,7 @@ public class GamePlayManagerState : FlowState
                     Vector3 newTarget = new Vector3(0, 0, -((float)value));
 
                     //interpolate over 30 frames
-                    speed = (newTarget - target).z / 30.0f;
+                    speed = (newTarget - model.transform.position).z / 30.0f;
                 }
                 break;
 
