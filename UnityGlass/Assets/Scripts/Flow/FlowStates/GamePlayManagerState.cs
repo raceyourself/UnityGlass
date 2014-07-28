@@ -61,6 +61,7 @@ public class GamePlayManagerState : FlowState
 
         DataVault.RegisterListner(this, "player_ahead_value");
         DataVault.RegisterListner(this, "finish_race");
+        DataVault.RegisterListner(this, "quit_race");
     }
 
     public override void StateUpdate()
@@ -97,7 +98,7 @@ public class GamePlayManagerState : FlowState
                 if (finish)
                 {
                     DataVault.Set(BluetoothMessageListener.MESSAGE_FINISH_RACE, false);
-                    FollowFlowLinkNamed("GameFinished");
+                    FollowFlowLinkNamed("GameFinished", this);
                 }
                 break;
 
@@ -107,7 +108,7 @@ public class GamePlayManagerState : FlowState
                 if (quit)
                 {
                     DataVault.Set(BluetoothMessageListener.MESSAGE_QUIT_RACE, false);
-                    FollowFlowLinkNamed("GameQuit");
+                    FollowFlowLinkNamed("GameQuit", this);
                 }
                 break;
         }

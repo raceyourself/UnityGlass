@@ -44,9 +44,12 @@ public class BTEventListener : FlowState
     {
         base.Apply(identifier);
 
-        string message = DataVault.GetString(BluetoothMessageListener.MESSAGE_NEW_BT_MESSAGE);
+        if (m_state == State.Idle)
+        {
+            string message = DataVault.GetString(BluetoothMessageListener.MESSAGE_NEW_BT_MESSAGE);
 
-        FollowFlowLinkNamed(message, this);
+            FollowFlowLinkNamed(message, this);
+        }
     }
 
 }

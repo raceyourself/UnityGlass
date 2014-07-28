@@ -51,13 +51,13 @@ public abstract class FlowState : GNode, IDataVaultListener
 		}
 		else
 		{
-			UnityEngine.Debug.LogWarning("FlowState: Didn't find flow link named '" + linkName+"'");
+			/*UnityEngine.Debug.LogWarning("FlowState: Didn't find flow link named '" + linkName+"'");
 
             int count = fs.Outputs.Count;
             string name1 = count > 0 ? fs.Outputs[0].Name : "--";
 
 
-            UnityEngine.Debug.LogWarning("Connection count:"+count+", '"+name1+"'"+" is equal "+(linkName==name1));
+            UnityEngine.Debug.LogWarning("Connection count:"+count+", '"+name1+"'"+" is equal "+(linkName==name1));*/
             
 			return false;
 		}
