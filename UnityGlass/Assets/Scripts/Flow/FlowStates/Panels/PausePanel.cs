@@ -39,15 +39,12 @@ public class PausePanel : TapSwipePanel {
         if (visible == false && physicalWidgetRoot.activeSelf == true)
         {
             physicalWidgetRoot.SetActive(false);
-            DataVault.Set(LOCK_NAME, tempLock);
-            Platform.Instance.BluetoothActionBroadcast("pause", false);
-
+            DataVault.Set(LOCK_NAME, tempLock);            
         }
         else if (visible == true && physicalWidgetRoot.activeSelf == false)
         {
             physicalWidgetRoot.SetActive(true);
             DataVault.Set(LOCK_NAME, screenInputLock);
-            Platform.Instance.BluetoothActionBroadcast("pause", true);
         }
     }
 
@@ -60,6 +57,8 @@ public class PausePanel : TapSwipePanel {
             {
                 return;
             }
+
+            Platform.Instance.BluetoothActionBroadcast("pause", false);
 
             ShowGraphic(false);
 		});
@@ -74,6 +73,7 @@ public class PausePanel : TapSwipePanel {
 
             if (physicalWidgetRoot.activeSelf != true)
             {
+                Platform.Instance.BluetoothActionBroadcast("pause", true);
                 ShowGraphic(true);
             }
             else

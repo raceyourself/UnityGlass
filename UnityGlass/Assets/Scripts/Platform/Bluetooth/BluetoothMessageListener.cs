@@ -24,8 +24,10 @@ public class BluetoothMessageListener : MonoBehaviour
     public const string MESSAGE_BT_CONNECTED = "bluetooth_connected"; //this is not an action
     public const string MESSAGE_POSITION_UPDATE = "position_update";
     public const string MESSAGE_FINISH_RACE = "finish_race";
+    public const string MESSAGE_QUIT_RACE = "quit_race";
     public const string MESSAGE_GET_DV_DATA = "get_datavault";
     public const string MESSAGE_SET_DV_DATA = "set_datavault";
+    public const string MESSAGE_NEW_BT_MESSAGE = "new_bt_message";
 
     public const string MESSAGE_PING        = "set_ping";
 
@@ -53,15 +55,19 @@ public class BluetoothMessageListener : MonoBehaviour
        
         //test debug data:
         //UnityEngine.Debug.Log("Platform: Bluetooth message: " + json.ToString());        
+        string action = json["action"].Value;
+        DataVault.Set(BluetoothMessageListener.MESSAGE_NEW_BT_MESSAGE, action);
 
         IEnumerable<JSONNode> children;
 
-        switch(json["action"]) 
+        switch(action) 
         {
             case MESSAGE_PING:
                 //find time offsets
                 float time = json["ping"].AsFloat;
                 time -= Time.time;
+
+                Debug.Log("ping state: " + time);
 
                 //record time offsets
                 pingOffsetTime.Add(time);

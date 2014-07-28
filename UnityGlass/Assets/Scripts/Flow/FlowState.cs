@@ -27,14 +27,23 @@ public abstract class FlowState : GNode, IDataVaultListener
 	/// </summary>
 	/// <returns><c>true</c>, if named flow link was followed, <c>false</c> otherwise.</returns>
 	/// <param name="linkName">Link name.</param>
-	public static bool FollowFlowLinkNamed(string linkName)
+    public static bool FollowFlowLinkNamed(string linkName)
+    {
+        return FollowFlowLinkNamed(linkName, null);
+    }
+
+	public static bool FollowFlowLinkNamed(string linkName, FlowState fs)
 	{
-		FlowState fs = FlowStateMachine.GetCurrentFlowState();
+        if (fs == null)
+        {
+            fs = FlowStateMachine.GetCurrentFlowState();
+        }
+
 		GConnector gc = fs.Outputs.Find( r => r.Name == linkName);
 		if(gc != null)
 		{
 			if(gc.EventFunction != null && gc.EventFunction.Length > 0 && gc.EventFunction != "") {
-				(gc.Parent as Panel).CallStaticFunction(gc.EventFunction, null);
+				(gc.Parent as FlowState).CallStaticFunction(gc.EventFunction, null);
 			}
 			
 			fs.parentMachine.FollowConnection(gc);
@@ -42,7 +51,14 @@ public abstract class FlowState : GNode, IDataVaultListener
 		}
 		else
 		{
-			UnityEngine.Debug.LogWarning("FlowState: Didn't find flow link named " + linkName);
+			UnityEngine.Debug.LogWarning("FlowState: Didn't find flow link named '" + linkName+"'");
+
+            int count = fs.Outputs.Count;
+            string name1 = count > 0 ? fs.Outputs[0].Name : "--";
+
+
+            UnityEngine.Debug.LogWarning("Connection count:"+count+", '"+name1+"'"+" is equal "+(linkName==name1));
+            
 			return false;
 		}
 	}

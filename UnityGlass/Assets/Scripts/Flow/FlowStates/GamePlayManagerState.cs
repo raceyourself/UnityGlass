@@ -47,6 +47,7 @@ public class GamePlayManagerState : FlowState
         Size = new Vector2(175, 80);
         NewInput("Enter", "Flow");
         NewOutput("GameFinished", "Flow");
+        NewOutput("GameQuit", "Flow");
     }
 
     public override void Entered()
@@ -92,10 +93,21 @@ public class GamePlayManagerState : FlowState
 
             case BluetoothMessageListener.MESSAGE_FINISH_RACE:
                 bool finish = DataVault.GetBool(BluetoothMessageListener.MESSAGE_FINISH_RACE);
+                Debug.Log("finish state: " + finish);
                 if (finish)
                 {
-                    DataVault.Set("finish_race", false);
+                    DataVault.Set(BluetoothMessageListener.MESSAGE_FINISH_RACE, false);
                     FollowFlowLinkNamed("GameFinished");
+                }
+                break;
+
+            case BluetoothMessageListener.MESSAGE_QUIT_RACE:
+                bool quit = DataVault.GetBool(BluetoothMessageListener.MESSAGE_QUIT_RACE);
+                Debug.Log("quit state: " + quit);
+                if (quit)
+                {
+                    DataVault.Set(BluetoothMessageListener.MESSAGE_QUIT_RACE, false);
+                    FollowFlowLinkNamed("GameQuit");
                 }
                 break;
         }

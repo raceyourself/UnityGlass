@@ -201,9 +201,9 @@ public abstract class Platform : SingletonBase
 
     public void BluetoothActionBroadcast(string action, object value)
     {
-        SimpleJSON.JSONNode j = new SimpleJSON.JSONNode();
+        SimpleJSON.JSONClass j = new SimpleJSON.JSONClass();
 
-        SimpleJSON.JSONData data;
+        SimpleJSON.JSONNode data;
         if (value is string)
             data = new SimpleJSON.JSONData((string)value);
         else if (value is int)
@@ -218,7 +218,7 @@ public abstract class Platform : SingletonBase
             return;
         }
         
-        j.Add(action, data);
+        j.Add(action, data);        
 
         BluetoothBroadcast(j.ToString());
     }

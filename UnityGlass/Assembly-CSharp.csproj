@@ -209,6 +209,7 @@
      <Compile Include="Assets\Scripts\Backend\UI\UIManager.cs" />
      <Compile Include="Assets\Scripts\Flow\FlowState.cs" />
      <Compile Include="Assets\Scripts\Flow\FlowStateMachine.cs" />
+     <Compile Include="Assets\Scripts\Flow\FlowStates\BTEventListener.cs" />
      <Compile Include="Assets\Scripts\Flow\FlowStates\Exit.cs" />
      <Compile Include="Assets\Scripts\Flow\FlowStates\ForwardingState.cs" />
      <Compile Include="Assets\Scripts\Flow\FlowStates\GamePlayManagerState.cs" />
